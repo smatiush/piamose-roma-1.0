@@ -1,0 +1,57 @@
+//@version=4
+strategy("piamose roma 1.0", overlay=true)
+///===input strategia===///
+///***input tp-sl***///
+tp_value = input(0.07, "Take Profit Percent", type =input.float)
+sl_value = input(0.07, "stop loss Percent", type =input.float)
+///***input data range per backtest***///
+startDay = input(title="start day", type=input.integer, defval=1, minval=1, maxval=31)
+startMonth = input(title="start month", type=input.integer, defval=1, minval=1, maxval=12)
+startYear = input(title="start year", type=input.integer, defval=2019, minval=1, maxval=9999)
+endDay = input(title="end day", type=input.integer, defval=1, minval=1, maxval=31)
+endMonth = input(title="end month", type=input.integer, defval=1, minval=1, maxval=12)
+endYear = input(title="end year", type=input.integer, defval=2019, minval=1, maxval=9999)
+p_Start = timestamp(startYear, startMonth, startDay, 0, 0)
+p_End = timestamp(endYear, endMonth, endDay, 0, 0)
+///***input UO***///
+length7 = input(7, minval=1)
+length14 = input(14, minval=1)
+length28 = input(28, minval=1)
+///***input ATR***///
+length = input(title="Length", defval=14, minval=1)
+smoothing = input(title="Smoothing", defval="RMA", options=["RMA", "SMA", "EMA", "WMA"])
+///===indicatori===///
+///***ultimate oscilator***///
+average(bp, tr_, length) =>
+    sum(bp, length) / sum(tr_, length)
+high_ = max(high, close[1])
+low_ = min(low, close[1])
+bp = close - low_
+tr_ = high_ - low_
+avg7 = average(bp, tr_, length7)
+avg14 = average(bp, tr_, length14)
+avg28 = average(bp, tr_, length28)
+uo = 100 * (4 * avg7 + 2 * avg14 + avg28) / 7
+///***atr***///
+ma_function(source, length) =>
+    if smoothing == "RMA"
+        rma(source, length)
+    else
+        if smoothing == "SMA"
+            sma(source, length)
+        else
+            if smoothing == "EMA"
+                ema(source, length)
+            else
+                wma(source, length)
+atr = ma_function(close, length)
+///condizioni entrata trade///
+longCondition = crossover(uo, 30)
+shortCondition = crossunder(uo, 70)
+window()  => time >= p_Start and time <= p_End 
+strategy.entry("long", strategy.long, when=longCondition and window() )
+strategy.entry("short", strategy.short, when=shortCondition and window())
+tp = tp_value/100
+sl = sl_value/100
+strategy.exit("exit long", "long", profit=tp, loss=sl)
+strategy.exit("exit short", "short",profit=tp, loss=sl)

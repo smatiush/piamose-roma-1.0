@@ -32,7 +32,7 @@ avg7 = average(bp, tr_, length7)
 avg14 = average(bp, tr_, length14)
 avg28 = average(bp, tr_, length28)
 uo = 100 * (4 * avg7 + 2 * avg14 + avg28) / 7
-///***atr***///
+///***atr****///
 ma_function(source, length) =>
     if smoothing == "RMA"
         rma(source, length)

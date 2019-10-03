@@ -14,9 +14,9 @@ endYear = input(title="end year", type=input.integer, defval=2019, minval=1, max
 p_Start = timestamp(startYear, startMonth, startDay, 0, 0)
 p_End = timestamp(endYear, endMonth, endDay, 0, 0)
 ///***input UO***///
-length7 = input(7, minval=1)
-length14 = input(14, minval=1)
-length28 = input(28, minval=1)
+
+
+
 ///***input ATR***///
 length = input(title="Length", defval=14, minval=1)
 smoothing = input(title="Smoothing", defval="RMA", options=["RMA", "SMA", "EMA", "WMA"])

@@ -1,6 +1,6 @@
 //@version=4
 strategy("piamose roma 1.0", overlay=true)
-///===input strategia===lol///
+///===input strategia===///
 ///***input tp-sl***///
 tp_value = input(0.07, "Take Profit Percent", type =input.float)
 sl_value = input(0.07, "stop loss Percent", type =input.float)
